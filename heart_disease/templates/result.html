@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+    
+
+</head>
+<body style="background-color: #B0C4DE;">
+    <div class="container" id="health">
+        <div class="jumbotron jumbotron-fluid" id="result" style="margin-top: 200px;">
+            <h1 style="text-align: center;">Heart Report</h1><br><br><br>
+            <div class="container">
+              <h1 class="display-4" style="font-size: 70px;"><b>Results - {{ value }}</b></h1><br>
+              {% if value %}
+              <p id="output" style="font-size: 28px;"></p>
+              <p class="lead" style="font-size: 40px; color: rgb(145, 10, 10);">Oh no!! You are at a serious risk of Heart Disease.  &#128532;</p>
+              <!-- <button class="btn btn-primary" onclick="getResult()">GET</button> -->
+              <p style="font-size: 20px;">These are the Red Flags for you:-</p>
+              <p id="op10" style="font-size: 20px;"></p>
+              <p id="op0" style="font-size: 20px;"></p>
+              <p id="op1" style="font-size: 20px;"></p>
+              <p id="op2" style="font-size: 20px;"></p>
+              <p id="op3" style="font-size: 20px;"></p>
+              <p id="op4" style="font-size: 20px;"></p>
+              <p id="op5" style="font-size: 20px;"></p>
+              <p id="op6" style="font-size: 20px;"></p>
+              <p id="op7" style="font-size: 20px;"></p>
+              <p id="op8" style="font-size: 20px;"></p>
+              <p id="op9" style="font-size: 20px;"></p>
+              &nbsp;<p style="font-size: 20px;">Here are a few tips for you.</p>
+              <ul>
+                  <li style="font-size: 20px;">
+                      Eat a healthy diet that strictly focusses on fruits, vegetables, whole grains, lean proteins(such as fish), beans,
+                      lentils, nuts and olive oil.
+                  </li>
+                  <li style="font-size: 20px;">
+                    Strictly avoid red meat, processed foods, and beverages with added sugars.
+                </li>
+                <li style="font-size: 20px;">
+                    Get good quality sleep.
+                </li>
+                <li style="font-size: 20px;">
+                    Stop smoking.
+                </li>
+                <li style="font-size: 20px;">
+                    Manage stress efficiently.
+                </li>
+                <li style="font-size: 20px;">
+                    Aim for atleast 45-60 minutes of physical activity daily.
+                </li>
+                <li style="font-size: 20px;">
+                    Get regular health screenings.
+                </li>
+                <li style="font-size: 20px;">
+                    Take your medications(if on any) consistently.
+                </li>
+              </ul>
+              <br>
+              
+              <div class="text-center">
+              
+              <a id="btn-Convert-Html2Image" class="btn btn-primary" style="color: white;">Download Report as PNG</a>
+              </div>
+              {% else %}
+              <p id="output" style="font-size: 28px;"></p>
+              <p class="lead" style="font-size: 40px; color: rgb(7, 128, 7);">Congratulations!!! You are Healthy. &#128512; </p>
+              <br>
+              <p style="font-size: 20px;">You can still follow these to avoid any risk of Coronary Heart Disease:</p>
+              <ul>
+                <li style="font-size: 20px;">
+                    Eat a balanced diet that includes everything like vitamins, proteins, minerals, carbohydrates, fats, etc.
+                </li>
+                <li style="font-size: 20px;">
+                  Avoid red meat, processed foods, and beverages with added sugars.
+              </li>
+              <li style="font-size: 20px;">
+                  Get good quality sleep.
+              </li>
+              <li style="font-size: 20px;">
+                  Stop smoking.
+              </li>
+              <li style="font-size: 20px;">
+                  Manage stress efficiently.
+              </li>
+              <li style="font-size: 20px;">
+                  Aim for atleast 45-60 minutes of physical activity daily.
+              </li>
+              <li style="font-size: 20px;">
+                  Get regular health screenings.
+              </li>
+              <li style="font-size: 20px;">
+                  Take your medications(if on any) consistently.
+              </li>
+            </ul>
+            <br>
+              
+              <div class="text-center">
+                <div id="editor"></div>
+                <button id="cmd" class="btn btn-primary" style="color: white;">Download Report</button>
+                          </div>
+              {% endif %}
+            </div>
+        </div>
+
+    </div>
+    
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<script type="text/javascript">
+var doc = new jsPDF('p', 'pt', 'letter');
+    var specialElementHandlers = {
+        '#editor': function (element, renderer) {
+            return true;
+        }
+    };
+
+    $('#cmd').click(function () {
+    var element = $('#health').get(0);
+    html2pdf().from(element).save();
+});
+    // function getResult(){
+    var full_name = sessionStorage.getItem("full_name");
+    document.getElementById('output').innerHTML = "Dear "+full_name+ ",";
+    var totalCho= sessionStorage.getItem("totalCho");
+    var sys_bp= sessionStorage.getItem("sys_bp");
+    var dia_bp= sessionStorage.getItem("dia_bp");
+    var heartrate= sessionStorage.getItem("heartrate");
+    var bmi= sessionStorage.getItem("bmi");
+    var glucose= sessionStorage.getItem("glucose");
+    var age= sessionStorage.getItem("age");
+    var sel1= sessionStorage.getItem("sel1");
+    var sel2= sessionStorage.getItem("sel2");
+    var sel3= sessionStorage.getItem("sel3");
+    var sel4= sessionStorage.getItem("sel4");
+
+    if(age>50){
+        document.getElementById("op10").innerHTML = ">> You are a senior citizen and hence already are closer to  disease.";
+    }
+    if(totalCho>200){
+        document.getElementById("op0").innerHTML = ">> You have a high cholesterol which has a direct effect on  heart disease.";
+    }
+    if(sys_bp>80){
+        document.getElementById("op1").innerHTML = ">> You have a high systolic blood pressure.";
+    }
+    if(dia_bp>120){
+        document.getElementById("op2").innerHTML = ">> You have a high diastolic blood pressure.";
+    }
+    if(heartrate>80){
+        document.getElementById("op3").innerHTML = ">> Your heart rate is abnormally high which has a direct link with heart related problems.";
+    }
+    if(bmi>23){
+        document.getElementById("op4").innerHTML = ">> Your BMI indicates obesity which on long term is quite hazardous.";
+    }
+    if(glucose>80){
+        document.getElementById("op5").innerHTML = ">> Your heart rate is abnormally high.";
+    }
+    if(sel1=="Yes"){
+        document.getElementById("op6").innerHTML = ">> Being on blood pressure medication can increase your disease chances.";
+    }
+    if(sel2=="Yes"){
+        document.getElementById("op7").innerHTML = ">> If you had a prevalent stroke can increase your disease chances.";
+    }
+    if(sel3=="Yes"){
+        document.getElementById("op8").innerHTML = ">> Having a prevalent hypertension can increase your disease chances.";
+    }
+    if(sel4=="Yes"){
+        document.getElementById("op9").innerHTML = ">> If you have diabetes, nothing can be more dangerous and you are closest to  heart disease.";
+    }
+    $(document).ready(function () {
+            var element = $("#result"); // global variable
+            var getCanvas; //global variable
+            html2canvas(element, {
+                onrendered: function (canvas) {
+                    getCanvas = canvas;
+                }
+            });
+ 
+            $("#btn-Convert-Html2Image").on('click', function () {
+                var imgageData = getCanvas.toDataURL("image/png");
+                //Now browser starts downloading it instead of just showing it
+                var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
+                $("#btn-Convert-Html2Image").attr("download", "report.png").attr("href", newData);
+            });
+        });
+    // }
+    
+</script>
+
+</html>
+
